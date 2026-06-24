@@ -1,0 +1,204 @@
+/* 1. Киберпанк шрифттерин импорттоо */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #030308;
+    /* Фондогу кибер-тор сызыктары (Matrix/Grid эффект) */
+    background-image: 
+        linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+}
+
+/* Фонундагы жаркыраган неон түтүктөрү */
+body::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 10px;
+    background: #fcee0a; /* Киберпанк сары түсү */
+    box-shadow: 0 0 20px #fcee0a, 0 0 40px #fcee0a;
+    top: 10%;
+    transform: rotate(-5deg);
+    opacity: 0.15;
+}
+
+/* 2. Калькулятордун Корпусу (Футуристтик интерфейс) */
+.calculator-container {
+    background: #0d0e15;
+    border: 3px solid #fcee0a; /* Негизги сары алкак */
+    border-radius: 0px; /* Киберпанкта тегерек бурчтар жок, баары курч болот! */
+    padding: 25px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 
+        0 0 20px rgba(252, 238, 10, 0.2),
+        inset 0 0 15px rgba(0, 242, 254, 0.1);
+    position: relative;
+    clip-path: polygon(0 0, 93% 0, 100% 7%, 100% 100%, 0 100%); /* Бурчу кесилген дизайн */
+}
+
+/* Кибер-деталь (Жогору жактагы кичинекей жасалга) */
+.calculator-container::after {
+    content: "SYS-STATUS: ACTIVE";
+    position: absolute;
+    top: -22px;
+    left: 10px;
+    font-size: 0.75rem;
+    color: #fcee0a;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 2px;
+}
+
+/* 3. Экран Бөлүмү */
+.calculator-screen {
+    background: #05060a;
+    border: 1px solid #00f2fe; /* Көк неон алкак */
+    padding: 20px;
+    text-align: right;
+    margin-bottom: 24px;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.3);
+}
+
+/* Экрандагы сканерлөөчү сызык эффекти (CRT мониторлордой) */
+.calculator-screen::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 6px 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.history {
+    font-size: 1rem;
+    color: rgba(0, 242, 254, 0.6);
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 5px;
+}
+
+.display {
+    font-size: 2.5rem;
+    color: #00f2fe; /* Электрдик көк түс */
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe;
+    overflow-x: auto;
+}
+
+/* 4. Баскычтар Торчосу */
+.calculator-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+/* Жалпы Баскыч Стили */
+.btn {
+    border: 1px solid #ff0055; /* Неон кызгылт чектери */
+    background: rgba(255, 0, 85, 0.03);
+    color: #ff0055;
+    padding: 18px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 0px; /* Бурчтары түз */
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    position: relative;
+    clip-path: polygon(0 0, 85% 0, 100% 25%, 100% 100%, 0 100%);
+}
+
+/* Жөнөкөй сандар баскычы */
+.num-btn {
+    border-color: #00f2fe;
+    color: #00f2fe;
+    background: rgba(0, 242, 254, 0.02);
+}
+
+.num-btn:hover {
+    background: #00f2fe;
+    color: #000;
+    box-shadow: 0 0 15px #00f2fe;
+    transform: scale(1.02);
+}
+
+/* Функциялык баскычтар (C, %, Backspace) */
+.action-btn {
+    border-color: #fcee0a;
+    color: #fcee0a;
+    background: rgba(252, 238, 10, 0.02);
+}
+
+.action-btn:hover {
+    background: #fcee0a;
+    color: #000;
+    box-shadow: 0 0 15px #fcee0a;
+}
+
+/* Математикалык операторлор (+, -, *, /) */
+.operator-btn:hover {
+    background: #ff0055;
+    color: #000;
+    box-shadow: 0 0 15px #ff0055;
+}
+
+/* Барабар (=) Баскычы */
+.equals-btn {
+    background: #fcee0a;
+    border-color: #fcee0a;
+    color: #000;
+    font-weight: 900;
+    box-shadow: 0 0 10px rgba(252, 238, 10, 0.4);
+}
+
+.equals-btn:hover {
+    background: #ffffff;
+    border-color: #ffffff;
+    box-shadow: 0 0 25px #ffffff;
+    transform: scale(1.02);
+}
+
+.wide-btn {
+    grid-column: span 2;
+}
+
+/* Баскандагы физикалык эффект */
+.btn:active {
+    transform: scale(0.95);
+    filter: brightness(1.5);
+}
+
+/* Мобилдик телефондор үчүн адаптация */
+@media (max-width: 400px) {
+    .calculator-container {
+        padding: 15px;
+    }
+    .btn {
+        padding: 14px;
+        font-size: 1.25rem;
+    }
+    .display {
+        font-size: 2rem;
+    }
+}
