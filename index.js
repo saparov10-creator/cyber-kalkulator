@@ -1,7 +1,6 @@
 const display = document.getElementById('display');
 const historyDisplay = document.getElementById('history');
 const historyLogList = document.getElementById('historyLogList');
-const clickSound = document.getElementById('clickSound');
 const calcContainer = document.getElementById('calcContainer');
 
 let currentInput = '0';
@@ -9,17 +8,39 @@ let previousInput = '';
 let operator = null;
 let shouldResetDisplay = false;
 let isCalculationDone = false;
-let memoryValue = 0; // Сактоо (Memory) үчүн өзгөрмө
+let memoryValue = 0;
 
-// Үн чыгаруу жана кыска вибрация эффекти
+// ЖАНЫ: Эч кандай аудио файлсыз, браузердин өзүнөн үн чыгаруучу санариптик синтезатор
 function playFeedback() {
-    // Үндү башынан ойнотуу
-    clickSound.currentTime = 0;
-    clickSound.play().catch(() => {}); // Кээ бир браузерлер блоктоп койбошу үчүн
+    try {
+        // Браузердин аудио контекстин чакыруу
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+        
+        // Осциллятор (үн толкунун жаратуучу)
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.type = 'sine'; // Жумшак жана таза электрондук үн толкуну
+        osc.frequency.setValueAtTime(1200, ctx.currentTime); // Үндүн бийиктиги (Гц)
+        
+        // Үндүн бат басылып, "чык" деп кыска угулушу үчүн убакытты жөндөө
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start();
+        osc.stop(ctx.currentTime + 0.05); // 0.05 секунддан кийин үндү өчүрүү
+    } catch (e) {
+        console.log("Браузердин аудио системасы иштебей калды:", e);
+    }
 
-    // Телефондордо кыска кибер-вибрация (эгер колдосо)
+    // Телефондо кыска титирөө (вибрация) эффекти
     if (navigator.vibrate) {
-        navigator.vibrate(15);
+        navigator.vibrate(12);
     }
 }
 
@@ -79,7 +100,7 @@ function calculate() {
         case '*': result = prev * current; break;
         case '/':
             if (current === 0) {
-                triggerGlitchEffect(); // Нөлгө бөлгөндө глитч анимациясы иштейт
+                triggerGlitchEffect();
                 clearDisplay();
                 display.innerText = "SYS_ERROR";
                 return;
@@ -102,13 +123,12 @@ function calculate() {
     updateDisplay();
 }
 
-// Жаңы кошулган Глитч (Экрандын титирөөсү) эффекти
 function triggerGlitchEffect() {
     calcContainer.classList.add('glitch-shake');
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
     setTimeout(() => {
         calcContainer.classList.remove('glitch-shake');
-    }, 600);
+    }, 500);
 }
 
 function addLogToHistory(equation) {
@@ -126,13 +146,11 @@ function addLogToHistory(equation) {
     }
 }
 
-// Тарыхты тазалоочу функция
 function clearHistoryLog() {
     playFeedback();
     historyLogList.innerHTML = '<span class="empty-log">Тарых бош...</span>';
 }
 
-// САКТОО (MEMORY) ФУНКЦИЯЛАРЫ
 function memorySave() {
     playFeedback();
     memoryValue = parseFloat(currentInput) || 0;
