@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600;700&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Rajdhani', sans-serif;
-    /* Телефондо кокустан чоңойтуп албоо үчүн */
     touch-action: manipulation;
+    user-select: none;
 }
 
 body {
@@ -14,189 +14,204 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    min-height: -webkit-fill-available; /* iOS телефондорунун экраны үчүн */
-    background-color: #030308;
+    min-height: -webkit-fill-available;
+    background-color: #020205;
     overflow: hidden;
-    padding: 10px;
+    padding: 8px;
     position: relative;
 }
 
-/* Фондук Кибер-тор */
+/* Фондогу анимациялуу тор */
 .cyber-grid {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0; left: 0;
     background-image: 
-        linear-gradient(rgba(0, 242, 254, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 242, 254, 0.02) 1px, transparent 1px);
-    background-size: 15px 15px;
+        linear-gradient(rgba(0, 242, 254, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 242, 254, 0.015) 1px, transparent 1px);
+    background-size: 20px 20px;
     z-index: 1;
 }
 
-/* Калькулятордун негизги корпусу */
+/* Негизги контейнер (Экрандын баарына 100% адаптивдүү) */
 .calculator-container {
-    background: #0d0e15;
+    background: #08090d;
     border: 2px solid #fcee0a;
     width: 100%;
-    /* Телефондун экранына карап автоматтык түрдө масштабын өзгөртөт */
-    max-width: 360px;
-    height: auto;
-    max-height: 95vh; 
-    padding: 15px;
-    box-shadow: 0 0 25px rgba(252, 238, 10, 0.15);
+    max-width: 350px;
+    padding: 14px;
+    box-shadow: 0 0 30px rgba(252, 238, 10, 0.12), inset 0 0 15px rgba(0, 242, 254, 0.05);
     z-index: 10;
     display: flex;
     flex-direction: column;
-    clip-path: polygon(0 0, 92% 0, 100% 6%, 100% 100%, 0 100%);
+    clip-path: polygon(0 0, 90% 0, 100% 8%, 100% 100%, 0 100%);
 }
 
-.sys-status {
-    font-size: 0.7rem;
-    color: #fcee0a;
+.sys-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
     font-family: 'Orbitron', sans-serif;
+    margin-bottom: 6px;
     letter-spacing: 1px;
-    margin-bottom: 8px;
 }
+.sys-status { color: #fcee0a; }
+.sys-ver { color: #555; }
 
-/* ЖАНЫ: ТАРЫХ БӨЛҮМҮ */
+/* ТАРЫХ БӨЛҮМҮ */
 .history-log-container {
-    background: rgba(5, 6, 10, 0.8);
-    border: 1px solid rgba(255, 0, 85, 0.3);
-    padding: 8px;
-    margin-bottom: 10px;
-    height: 80px;
+    background: #040407;
+    border: 1px dashed rgba(255, 0, 85, 0.3);
+    padding: 6px;
+    margin-bottom: 8px;
+    height: 75px;
     display: flex;
     flex-direction: column;
 }
 
+.history-log-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 0, 85, 0.15);
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+}
+
 .history-log-title {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: #ff0055;
     font-family: 'Orbitron', sans-serif;
-    margin-bottom: 4px;
-    border-bottom: 1px dashed rgba(255, 0, 85, 0.2);
+    font-weight: 700;
 }
+
+.clear-log-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 0, 85, 0.5);
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: color 0.2s;
+}
+.clear-log-btn:hover { color: #ff0055; }
 
 .history-log-list {
     flex-grow: 1;
     overflow-y: auto;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #00f2fe;
-    text-align: left;
     font-family: 'Orbitron', sans-serif;
 }
 
 .log-item {
-    display: block;
-    border-bottom: 1px solid rgba(0, 242, 254, 0.1);
-    padding: 2px 0;
-    animation: fadeIn 0.3s ease;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.05);
+    padding: 1px 0;
 }
 
-.empty-log {
-    color: #444;
-    font-size: 0.8rem;
-    font-style: italic;
-}
+.empty-log { color: #333; font-size: 0.75rem; font-style: italic; }
 
-/* Экран Стили */
+/* ЭКРАН СТИЛИ */
 .calculator-screen {
-    background: #05060a;
+    background: #020305;
     border: 1px solid #00f2fe;
-    padding: 12px;
-    text-align: right;
-    margin-bottom: 15px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
     min-height: 75px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.2);
+    box-shadow: inset 0 0 12px rgba(0, 242, 254, 0.15);
+    position: relative;
 }
 
 .history-current {
-    font-size: 0.85rem;
-    color: rgba(0, 242, 254, 0.5);
+    font-size: 0.8rem;
+    color: rgba(0, 242, 254, 0.4);
     font-family: 'Orbitron', sans-serif;
 }
 
 .display {
-    font-size: 2rem;
+    font-size: 1.9rem;
     color: #00f2fe;
     font-family: 'Orbitron', sans-serif;
     font-weight: 700;
-    text-shadow: 0 0 8px #00f2fe;
+    text-shadow: 0 0 6px #00f2fe;
     overflow-x: auto;
 }
 
-/* Баскычтар тору */
+/* БАСКЫЧТАР */
 .calculator-buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px; /* Телефонго ыңгайлуу кичирээк боштук */
+    gap: 6px; /* Телефондор үчүн идеалдуу тыгыздык */
 }
 
-/* Жалпы баскычтар */
 .btn {
     border: 1px solid #ff0055;
-    background: rgba(255, 0, 85, 0.02);
+    background: rgba(255, 0, 85, 0.01);
     color: #ff0055;
-    /* Экрандын өлчөмүнө жараша шрифт жана бийиктик автоматтык түрдө чоңоюп-кичирейет */
-    padding: clamp(10px, 2.5vh, 18px);
-    font-size: clamp(1.1rem, 2.2vh, 1.4rem);
+    padding: clamp(8px, 2.2vh, 16px);
+    font-size: clamp(1.1rem, 2vh, 1.3rem);
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.1s ease;
-    clip-path: polygon(0 0, 85% 0, 100% 25%, 100% 100%, 0 100%);
+    transition: all 0.08s ease;
+    clip-path: polygon(0 0, 88% 0, 100% 20%, 100% 100%, 0 100%);
 }
 
 .btn * { pointer-events: none; }
 
+/* Сандар баскычтары */
 .num-btn {
     border-color: #00f2fe;
     color: #00f2fe;
-    background: rgba(0, 242, 254, 0.01);
 }
+.num-btn:hover { background: rgba(0, 242, 254, 0.1); }
 
-.num-btn:hover {
-    background: #00f2fe;
-    color: #000;
-    box-shadow: 0 0 10px #00f2fe;
+/* Функциялык баскычтар (C, Backspace) */
+.action-btn { border-color: #fcee0a; color: #fcee0a; }
+.action-btn:hover { background: rgba(252, 238, 10, 0.1); }
+
+/* Операторлор */
+.operator-btn { border-color: #ff0055; color: #ff0055; }
+.operator-btn:hover { background: rgba(255, 0, 85, 0.1); }
+
+/* Эс тутум (Memory) баскычтары */
+.mem-btn {
+    border-color: #94a3b8;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    padding: 6px;
 }
+.mem-btn:hover { background: rgba(148, 163, 184, 0.1); }
 
-.action-btn {
-    border-color: #fcee0a;
-    color: #fcee0a;
-}
-
-.action-btn:hover {
-    background: #fcee0a;
-    color: #000;
-    box-shadow: 0 0 10px #fcee0a;
-}
-
-.operator-btn:hover {
-    background: #ff0055;
-    color: #000;
-    box-shadow: 0 0 10px #ff0055;
-}
-
+/* Барабар (=) баскычынын кооз формасы */
 .equals-btn {
     background: #fcee0a;
     border-color: #fcee0a;
     color: #000;
+    grid-row: span 2; /* 2 катар ылдый созулат */
+    height: 100%;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 85% 100%, 0 100%);
+}
+.equals-btn:hover { background: #fff; border-color: #fff; box-shadow: 0 0 12px #fff; }
+
+.wide-btn { grid-column: span 2; clip-path: polygon(0 0, 94% 0, 100% 20%, 100% 100%, 0 100%); }
+
+.btn:active { transform: scale(0.93); filter: brightness(1.3); }
+
+/* КАТА КЕТКЕНДЕГИ ГЛИТЧ АНИМАЦИЯСЫ */
+.glitch-shake {
+    animation: shake 0.2s infinite;
+    border-color: #ff0055 !important;
+    box-shadow: 0 0 20px #ff0055 !important;
 }
 
-.equals-btn:hover {
-    background: #fff;
-    border-color: #fff;
-    box-shadow: 0 0 15px #fff;
-}
-
-.wide-btn { grid-column: span 2; }
-.btn:active { transform: scale(0.92); }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-3px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    20% { transform: translate(-1px, -2px) rotate(-1deg); }
+    40% { transform: translate(-3px, 0px) rotate(1deg); }
+    60% { transform: translate(3px, 2px) rotate(0deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
 }

@@ -3,53 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cyberpunk Premium Calculator</title>
+    <title>Cyberpunk Ultimate Calculator v2.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" preload="auto"></audio>
+
     <div class="cyber-grid"></div>
 
-    <div class="calculator-container">
-        <div class="sys-status">SYS.STATUS: ONLINE</div>
+    <div class="calculator-container" id="calcContainer">
+        <div class="sys-header">
+            <span class="sys-status"><i class="fas fa-microchip"></i> CORES: ONLINE</span>
+            <span class="sys-ver">v2.0_ULTIMATE</span>
+        </div>
 
         <div class="history-log-container">
-            <div class="history-log-title">ЛОГДОР / ИСТOРИЯ</div>
+            <div class="history-log-header">
+                <span class="history-log-title">МАТРИЦА ЛОГДОРУ</span>
+                <button class="clear-log-btn" onclick="clearHistoryLog()"><i class="fas fa-trash-alt"></i></button>
+            </div>
             <div class="history-log-list" id="historyLogList">
                 <span class="empty-log">Тарых бош...</span>
             </div>
         </div>
 
-        <div class="calculator-screen">
+        <div class="calculator-screen" id="calcScreen">
             <div class="history-current" id="history"></div>
             <div class="display" id="display">0</div>
         </div>
 
         <div class="calculator-buttons">
+            <button class="btn mem-btn" onclick="memorySave()">M+</button>
+            <button class="btn mem-btn" onclick="memoryRecall()">MR</button>
+            <button class="btn mem-btn" onclick="memoryClear()">MC</button>
+            <button class="btn operator-btn" onclick="appendOperator('%')">%</button>
+
             <button class="btn action-btn" onclick="clearDisplay()">C</button>
             <button class="btn action-btn" onclick="deleteLast()"><i class="fas fa-backspace"></i></button>
-            <button class="btn action-btn" onclick="appendOperator('%')">%</button>
             <button class="btn operator-btn" onclick="appendOperator('/')">÷</button>
+            <button class="btn operator-btn" onclick="appendOperator('*')">×</button>
 
             <button class="btn num-btn" onclick="appendNumber('7')">7</button>
             <button class="btn num-btn" onclick="appendNumber('8')">8</button>
             <button class="btn num-btn" onclick="appendNumber('9')">9</button>
-            <button class="btn operator-btn" onclick="appendOperator('*')">×</button>
+            <button class="btn operator-btn" onclick="appendOperator('-')">−</button>
 
             <button class="btn num-btn" onclick="appendNumber('4')">4</button>
             <button class="btn num-btn" onclick="appendNumber('5')">5</button>
             <button class="btn num-btn" onclick="appendNumber('6')">6</button>
-            <button class="btn operator-btn" onclick="appendOperator('-')">−</button>
+            <button class="btn operator-btn" onclick="appendOperator('+')">+</button>
 
             <button class="btn num-btn" onclick="appendNumber('1')">1</button>
             <button class="btn num-btn" onclick="appendNumber('2')">2</button>
             <button class="btn num-btn" onclick="appendNumber('3')">3</button>
-            <button class="btn operator-btn" onclick="appendOperator('+')">+</button>
-
+            
+            <button class="btn equals-btn" onclick="calculate()">=</button>
+            
             <button class="btn num-btn wide-btn" onclick="appendNumber('0')">0</button>
             <button class="btn num-btn" onclick="appendNumber('.')">.</button>
-            <button class="btn equals-btn" onclick="calculate()">=</button>
         </div>
     </div>
 

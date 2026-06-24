@@ -1,15 +1,30 @@
 const display = document.getElementById('display');
 const historyDisplay = document.getElementById('history');
 const historyLogList = document.getElementById('historyLogList');
+const clickSound = document.getElementById('clickSound');
+const calcContainer = document.getElementById('calcContainer');
 
 let currentInput = '0';
 let previousInput = '';
 let operator = null;
 let shouldResetDisplay = false;
 let isCalculationDone = false;
+let memoryValue = 0; // Сактоо (Memory) үчүн өзгөрмө
 
-// Сандарды кошуу
+// Үн чыгаруу жана кыска вибрация эффекти
+function playFeedback() {
+    // Үндү башынан ойнотуу
+    clickSound.currentTime = 0;
+    clickSound.play().catch(() => {}); // Кээ бир браузерлер блоктоп койбошу үчүн
+
+    // Телефондордо кыска кибер-вибрация (эгер колдосо)
+    if (navigator.vibrate) {
+        navigator.vibrate(15);
+    }
+}
+
 function appendNumber(number) {
+    playFeedback();
     if (isCalculationDone) {
         currentInput = number;
         isCalculationDone = false;
@@ -28,11 +43,9 @@ function appendNumber(number) {
     updateDisplay();
 }
 
-// Амалдарды кошуу (+, -, *, /)
 function appendOperator(op) {
-    if (isCalculationDone) {
-        isCalculationDone = false;
-    }
+    playFeedback();
+    if (isCalculationDone) isCalculationDone = false;
 
     if (operator !== null && !shouldResetDisplay) {
         calculate();
@@ -50,8 +63,8 @@ function getOperatorSymbol(op) {
     return op;
 }
 
-// Эсептөө жана тарыхка (Историяга) жазуу
 function calculate() {
+    playFeedback();
     if (operator === null || shouldResetDisplay) return;
 
     let result;
@@ -66,8 +79,9 @@ function calculate() {
         case '*': result = prev * current; break;
         case '/':
             if (current === 0) {
-                alert("Нөлгө бөлүүгө болбойт!");
+                triggerGlitchEffect(); // Нөлгө бөлгөндө глитч анимациясы иштейт
                 clearDisplay();
+                display.innerText = "SYS_ERROR";
                 return;
             }
             result = prev / current;
@@ -79,10 +93,7 @@ function calculate() {
     const finalResult = parseFloat(result.toFixed(4)).toString();
     const fullEquation = `${previousInput} ${getOperatorSymbol(operator)} ${current} = ${finalResult}`;
 
-    // Экрандагы учурдагы тарыхты жаңыртуу
     historyDisplay.innerText = `${previousInput} ${getOperatorSymbol(operator)} ${current} =`;
-    
-    // ЖАНЫ: Жогорку "Логдор" тилкесине эсеп тарыхын кошуу
     addLogToHistory(fullEquation);
 
     currentInput = finalResult;
@@ -91,9 +102,16 @@ function calculate() {
     updateDisplay();
 }
 
-// Тарыхка жаңы эсеп кошуу функциясы
+// Жаңы кошулган Глитч (Экрандын титирөөсү) эффекти
+function triggerGlitchEffect() {
+    calcContainer.classList.add('glitch-shake');
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    setTimeout(() => {
+        calcContainer.classList.remove('glitch-shake');
+    }, 600);
+}
+
 function addLogToHistory(equation) {
-    // "Тарых бош..." деген жазууну алып салуу
     const emptyMsg = historyLogList.querySelector('.empty-log');
     if (emptyMsg) emptyMsg.remove();
 
@@ -101,17 +119,41 @@ function addLogToHistory(equation) {
     logItem.className = 'log-item';
     logItem.innerText = equation;
 
-    // Жаңы эсепти эң өйдө жагына кошуу
     historyLogList.insertBefore(logItem, historyLogList.firstChild);
 
-    // Тарых ашыкча толуп кетпеши үчүн акыркы 20 эсепти гана сактайт
     if (historyLogList.children.length > 20) {
         historyLogList.lastChild.remove();
     }
 }
 
-// Тазалоо
+// Тарыхты тазалоочу функция
+function clearHistoryLog() {
+    playFeedback();
+    historyLogList.innerHTML = '<span class="empty-log">Тарых бош...</span>';
+}
+
+// САКТОО (MEMORY) ФУНКЦИЯЛАРЫ
+function memorySave() {
+    playFeedback();
+    memoryValue = parseFloat(currentInput) || 0;
+    historyDisplay.innerText = `M+ STORED: ${memoryValue}`;
+    shouldResetDisplay = true;
+}
+
+function memoryRecall() {
+    playFeedback();
+    currentInput = memoryValue.toString();
+    updateDisplay();
+}
+
+function memoryClear() {
+    playFeedback();
+    memoryValue = 0;
+    historyDisplay.innerText = "M- CLEARED";
+}
+
 function clearDisplay() {
+    playFeedback();
     currentInput = '0';
     previousInput = '';
     operator = null;
@@ -120,8 +162,8 @@ function clearDisplay() {
     updateDisplay();
 }
 
-// Өчүрүү
 function deleteLast() {
+    playFeedback();
     if (isCalculationDone) return;
     if (currentInput.length > 1) {
         currentInput = currentInput.slice(0, -1);
