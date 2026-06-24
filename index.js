@@ -1,41 +1,56 @@
 const display = document.getElementById('display');
 const historyDisplay = document.getElementById('history');
+const historyLogList = document.getElementById('historyLogList');
 
 let currentInput = '0';
 let previousInput = '';
 let operator = null;
 let shouldResetDisplay = false;
+let isCalculationDone = false;
 
-// Санды экранга чыгаруу
+// Сандарды кошуу
 function appendNumber(number) {
+    if (isCalculationDone) {
+        currentInput = number;
+        isCalculationDone = false;
+        shouldResetDisplay = false;
+        updateDisplay();
+        return;
+    }
+
     if (currentInput === '0' || shouldResetDisplay) {
         currentInput = number;
         shouldResetDisplay = false;
     } else {
-        // Бир нече чекит коюлуп калуусунун алдын алуу
         if (number === '.' && currentInput.includes('.')) return;
         currentInput += number;
     }
     updateDisplay();
 }
 
-// Операторду кошуу (+, -, *, /)
+// Амалдарды кошуу (+, -, *, /)
 function appendOperator(op) {
-    if (operator !== null) calculate();
+    if (isCalculationDone) {
+        isCalculationDone = false;
+    }
+
+    if (operator !== null && !shouldResetDisplay) {
+        calculate();
+    }
+    
     previousInput = currentInput;
     operator = op;
     historyDisplay.innerText = `${previousInput} ${getOperatorSymbol(op)}`;
     shouldResetDisplay = true;
 }
 
-// Математикалык символдорду сулуу көрсөтүү
 function getOperatorSymbol(op) {
     if (op === '*') return '×';
     if (op === '/') return '÷';
     return op;
 }
 
-// Эсептөө функциясы (=)
+// Эсептөө жана тарыхка (Историяга) жазуу
 function calculate() {
     if (operator === null || shouldResetDisplay) return;
 
@@ -46,15 +61,9 @@ function calculate() {
     if (isNaN(prev) || isNaN(current)) return;
 
     switch (operator) {
-        case '+':
-            result = prev + current;
-            break;
-        case '-':
-            result = prev - current;
-            break;
-        case '*':
-            result = prev * current;
-            break;
+        case '+': result = prev + current; break;
+        case '-': result = prev - current; break;
+        case '*': result = prev * current; break;
         case '/':
             if (current === 0) {
                 alert("Нөлгө бөлүүгө болбойт!");
@@ -63,31 +72,57 @@ function calculate() {
             }
             result = prev / current;
             break;
-        case '%':
-            result = (prev * current) / 100;
-            break;
-        default:
-            return;
+        case '%': result = (prev * current) / 100; break;
+        default: return;
     }
 
-    // Жыйынтыкты өтө узун кылбай, 4 санга чейин тегеректөө
-    currentInput = parseFloat(result.toFixed(4)).toString();
+    const finalResult = parseFloat(result.toFixed(4)).toString();
+    const fullEquation = `${previousInput} ${getOperatorSymbol(operator)} ${current} = ${finalResult}`;
+
+    // Экрандагы учурдагы тарыхты жаңыртуу
     historyDisplay.innerText = `${previousInput} ${getOperatorSymbol(operator)} ${current} =`;
+    
+    // ЖАНЫ: Жогорку "Логдор" тилкесине эсеп тарыхын кошуу
+    addLogToHistory(fullEquation);
+
+    currentInput = finalResult;
     operator = null;
+    isCalculationDone = true;
     updateDisplay();
 }
 
-// Экранды толук тазалоо (C)
+// Тарыхка жаңы эсеп кошуу функциясы
+function addLogToHistory(equation) {
+    // "Тарых бош..." деген жазууну алып салуу
+    const emptyMsg = historyLogList.querySelector('.empty-log');
+    if (emptyMsg) emptyMsg.remove();
+
+    const logItem = document.createElement('div');
+    logItem.className = 'log-item';
+    logItem.innerText = equation;
+
+    // Жаңы эсепти эң өйдө жагына кошуу
+    historyLogList.insertBefore(logItem, historyLogList.firstChild);
+
+    // Тарых ашыкча толуп кетпеши үчүн акыркы 20 эсепти гана сактайт
+    if (historyLogList.children.length > 20) {
+        historyLogList.lastChild.remove();
+    }
+}
+
+// Тазалоо
 function clearDisplay() {
     currentInput = '0';
     previousInput = '';
     operator = null;
+    isCalculationDone = false;
     historyDisplay.innerText = '';
     updateDisplay();
 }
 
-// Акыркы бир эле санды өчүрүү (Backspace)
+// Өчүрүү
 function deleteLast() {
+    if (isCalculationDone) return;
     if (currentInput.length > 1) {
         currentInput = currentInput.slice(0, -1);
     } else {
@@ -96,7 +131,6 @@ function deleteLast() {
     updateDisplay();
 }
 
-// Экранды жаңылоо
 function updateDisplay() {
     display.innerText = currentInput;
 }

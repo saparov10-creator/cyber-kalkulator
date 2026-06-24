@@ -2,21 +2,27 @@
 <html lang="ky">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Премиум Неон Калькулятор</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cyberpunk Premium Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="background-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
+    <div class="cyber-grid"></div>
 
     <div class="calculator-container">
+        <div class="sys-status">SYS.STATUS: ONLINE</div>
+
+        <div class="history-log-container">
+            <div class="history-log-title">ЛОГДОР / ИСТOРИЯ</div>
+            <div class="history-log-list" id="historyLogList">
+                <span class="empty-log">Тарых бош...</span>
+            </div>
+        </div>
+
         <div class="calculator-screen">
-            <div class="history" id="history"></div>
+            <div class="history-current" id="history"></div>
             <div class="display" id="display">0</div>
         </div>
 
